@@ -25,6 +25,10 @@ import type {
   NovelText,
   RunDetail,
   RunSummary,
+  SceneCapabilities,
+  SceneCharacter,
+  SceneSession,
+  SceneSessionDetail,
   SourceKind,
   TextMode,
 } from './types'
@@ -213,6 +217,35 @@ export const api = {
 
   cancelAgentSession: (sessionId: string) =>
     request<{ accepted: boolean; message: string }>(`/agent/sessions/${sessionId}/cancel`, {
+      method: 'POST',
+    }),
+
+  /* ---------------- 对话工坊 ----------------
+   * 第三条链路。形状与故事工坊同款（建会话即开演、意见走 202、停走 cancel），
+   * 但多一个「一场演完还能接着改」的粒度：`scene_completed` 之后会话回到
+   * 待命，`can_revise` 说了算。事件流同样走 `openRunStream` 的 `path`。 */
+
+  sceneCapabilities: () => request<SceneCapabilities>('/scene/capabilities'),
+
+  /** 建会话**即开演**：返回时 status 已经是 running、stage 是「导演正在排戏…」。 */
+  createSceneSession: (p: { input: string; characters: SceneCharacter[]; rounds: number }) =>
+    request<SceneSessionDetail>('/scene/sessions', {
+      method: 'POST',
+      body: JSON.stringify(p),
+    }),
+
+  getSceneSession: (sessionId: string) =>
+    request<SceneSessionDetail>(`/scene/sessions/${sessionId}`),
+
+  /** 202：返回的是「已收下」，改哪几回合与改后的台词都要等事件流。 */
+  reviseSceneSession: (sessionId: string, instruction: string) =>
+    request<SceneSession>(`/scene/sessions/${sessionId}/revise`, {
+      method: 'POST',
+      body: JSON.stringify({ instruction }),
+    }),
+
+  cancelSceneSession: (sessionId: string) =>
+    request<{ accepted: boolean; message: string }>(`/scene/sessions/${sessionId}/cancel`, {
       method: 'POST',
     }),
 }

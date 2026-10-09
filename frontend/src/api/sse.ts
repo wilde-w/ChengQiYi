@@ -61,6 +61,13 @@ const TERMINAL = new Set([
   // 「待命的会话也要挂着连接」的理由（见 api/v1/agent.py 的模块注释）。
   'agent_completed',
   'agent_cancelled',
+  // 对话工坊。**`scene_completed` 必须在这里**，理由与 `agent_completed` 同一条
+  // 但更硬：一场演完不关流（创作者马上要提意见），调用方传了
+  // `keepOpenOnTerminal`，所以它到了不会关连接；可它要是**不**在这个集合里，
+  // 那么服务端在会话被取消/回收后关掉连接时，这里会按「半路断线」处理并退避
+  // 重连——对着一个终态会话每 5 秒重连一次，永远如此。
+  'scene_completed',
+  'scene_cancelled',
   'error',
 ])
 

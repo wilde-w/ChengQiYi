@@ -36,6 +36,7 @@ export function TopBar({
   onOpenKb,
   onOpenKbText,
   onOpenAgent,
+  onOpenScene,
 }: {
   input: string
   onInputChange: (v: string) => void
@@ -54,6 +55,7 @@ export function TopBar({
   onOpenKb: () => void
   onOpenKbText: () => void
   onOpenAgent: () => void
+  onOpenScene: () => void
 }) {
   return (
     <header className="border-line bg-surface shrink-0 border-b">
@@ -117,6 +119,18 @@ export function TopBar({
           className="border-line text-ink-soft hover:bg-paper-sunk hover:text-ink rounded-md border px-3 py-[7px] text-[13px] transition-colors"
         >
           ✍ 写故事
+        </button>
+
+        {/* 对话工坊。**与「写故事」并列的第三条链路**：那边是一个写手从头写到尾，
+            这边是一桌人各说各的、演完还能逐句改。同样不受 running 影响——它有
+            自己的会话、自己的表和自己的事件流。 */}
+        <button
+          type="button"
+          onClick={onOpenScene}
+          title="填一段评论和几张人物卡，让这桌人自己把戏演出来；演完可以逐句提意见"
+          className="border-line text-ink-soft hover:bg-paper-sunk hover:text-ink rounded-md border px-3 py-[7px] text-[13px] transition-colors"
+        >
+          🎭 写对话
         </button>
 
         {/* 导入不受 running 影响：分析在跑的时候往知识库里加东西是安全的，

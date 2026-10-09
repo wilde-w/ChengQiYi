@@ -66,7 +66,18 @@ def _hits(package: str, forbidden: str) -> list[str]:
 
 @pytest.mark.parametrize(
     "package,forbidden",
-    [("agent", "app.graph"), ("graph", "app.agent")],
+    [
+        ("agent", "app.graph"),
+        ("graph", "app.agent"),
+        # 对话工坊是**第三条**控制流（多角色圆桌），与另外两条互相隔离的理由
+        # 更硬：一旦 `app/scene/` 能 import `app/graph/` 或 `app/agent/`，
+        # 「这句台词是谁决定的」就会有两套可能的答案。三对全查，缺一对就等于
+        # 给那条路开了个后门——而 `_hits` 只会静静返回空列表。
+        ("scene", "app.graph"),
+        ("graph", "app.scene"),
+        ("scene", "app.agent"),
+        ("agent", "app.scene"),
+    ],
 )
 def test_两边互不import(package: str, forbidden: str):
     assert _hits(package, forbidden) == []
@@ -89,3 +100,4 @@ def test_判据本身是有效的():
 
     assert _hits("graph", "app.graph") != []
     assert _hits("agent", "app.agent") != []
+    assert _hits("scene", "app.scene") != []

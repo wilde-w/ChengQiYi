@@ -9,6 +9,7 @@ from app.models.base import Base, new_id
 from app.models.insight import Evidence, InsightSection, ReasoningStep
 from app.models.library import Case, KbDocument, KbImportJob, RunEvent
 from app.models.run import AnalysisRun, Cluster, Comment, PsychProfile, Video
+from app.models.scene import SceneEvent, SceneSession, SceneTurn
 
 __all__ = [
     "AgentEvent",
@@ -26,6 +27,9 @@ __all__ = [
     "PsychProfile",
     "ReasoningStep",
     "RunEvent",
+    "SceneEvent",
+    "SceneSession",
+    "SceneTurn",
     "Video",
     "new_id",
 ]

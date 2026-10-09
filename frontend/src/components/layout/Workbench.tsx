@@ -15,6 +15,7 @@ import { EvidenceBoard } from '../middle/EvidenceBoard'
 import { ProfileCard } from '../middle/ProfileCard'
 import { ProgressStream } from '../middle/ProgressStream'
 import { ReasoningChain } from '../middle/ReasoningChain'
+import { SceneDialog } from '../scene/SceneDialog'
 import { SectionBoard } from '../right/SectionBoard'
 import { TextSourceDialog } from '../source/TextSourceDialog'
 import { ColumnShell } from './ColumnShell'
@@ -40,6 +41,7 @@ export function Workbench() {
   const [kbOpen, setKbOpen] = useState(false)
   const [kbTextOpen, setKbTextOpen] = useState(false)
   const [agentOpen, setAgentOpen] = useState(false)
+  const [sceneOpen, setSceneOpen] = useState(false)
   const [textOpen, setTextOpen] = useState(false)
 
   const stream = useRunStream()
@@ -216,6 +218,7 @@ export function Workbench() {
         onOpenKb={() => setKbOpen(true)}
         onOpenKbText={() => setKbTextOpen(true)}
         onOpenAgent={() => setAgentOpen(true)}
+        onOpenScene={() => setSceneOpen(true)}
       />
 
       <main className="flex min-h-0 flex-1">
@@ -342,6 +345,10 @@ export function Workbench() {
       {/* 故事工坊。挂在这里而不是塞进某一栏：它有自己的会话与事件流，
           与三栏里的任何一栏都不是同一个东西。 */}
       <StoryAgentDialog open={agentOpen} onClose={() => setAgentOpen(false)} />
+
+      {/* 对话工坊同理。两个面板可以同时开着——一场戏在演的时候去改故事的稿，
+          是安全的。 */}
+      <SceneDialog open={sceneOpen} onClose={() => setSceneOpen(false)} />
 
       <TextSourceDialog
         open={textOpen}

@@ -119,6 +119,25 @@ class EventType(StrEnum):
     AGENT_COMPLETED = "agent_completed"
     AGENT_CANCELLED = "agent_cancelled"
 
+    # ---- 对话工坊（`app/scene/`）--------------------------------------
+    # 第三条链路。同一套信封与 SSE 帧机，命名空间 `scene`，表也是新的。
+    # 复用协议、不复用通道——理由与上面一行完全相同。
+    SCENE_STARTED = "scene_started"
+    #: 导演的安排（处境/各人目标/发言顺序）。开演时一次，给面板顶部的折叠区。
+    SCENE_SETUP = "scene_setup"
+    #: 轮到谁了（data.turn_index/speaker）。连续几个回合之间的静默期里，
+    #: 前端靠它维持「还在动」的观感，也是重写就地进行时的起点。
+    SCENE_THINKING = "scene_thinking"
+    #: 一句台词定稿（落库之后才发）。改稿时是**替换**同一个 turn_index。
+    SCENE_TURN = "scene_turn"
+    #: 创作者的意见被受理。POST 一回来就发，不依赖导演调用成功——
+    #: 否则「意见发出去了但界面什么都没发生」会让人以为没提交上。
+    SCENE_NOTE = "scene_note"
+    #: 导演的修改安排：改哪几回合、每回合怎么改。
+    SCENE_REWRITES = "scene_rewrites"
+    SCENE_COMPLETED = "scene_completed"
+    SCENE_CANCELLED = "scene_cancelled"
+
 
 class SectionKey(StrEnum):
     """右栏洞察输出的四个段落。"""
@@ -153,6 +172,27 @@ class AgentStage(StrEnum):
             AgentStage.THINKING: "模型正在思考…",
             AgentStage.TOOL: "正在查资料…",
             AgentStage.WRITING: "正在写…",
+        }[self]
+
+
+class SceneStage(StrEnum):
+    """对话工坊面板上的那句「导演正在排戏…」。
+
+    `status` 复用 `AgentStatus` 的**值**——idle/running/failed/cancelled 的
+    语义完全一样，连同「终态是单向门」那条规矩。但 label 要另给一份：
+    `AgentStatus.label` 会说「写作中」，用在戏上是错的。
+    """
+
+    DIRECTING = "directing"
+    PERFORMING = "performing"
+    REVISING = "revising"
+
+    @property
+    def label(self) -> str:
+        return {
+            SceneStage.DIRECTING: "导演正在排戏…",
+            SceneStage.PERFORMING: "正在演…",
+            SceneStage.REVISING: "导演正在看你的意见…",
         }[self]
 
 

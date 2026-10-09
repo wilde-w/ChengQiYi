@@ -129,6 +129,9 @@ class MockChatModel:
             "literary": self._literary,
             "section_regen": self._section_regen,
             "tag_chunks": self._tag_chunks,
+            "scene_setup": self._scene_setup,
+            "scene_turn": self._scene_turn,
+            "scene_revise": self._scene_revise,
         }
 
     # -- 协议实现 ---------------------------------------------------------
@@ -384,6 +387,18 @@ class MockChatModel:
             )
         return {"items": items}
 
+    # -- 对话工坊（`app/scene/`）的三道调用 --------------------------------
+    def _scene_setup(self, ctx: dict[str, Any]) -> dict[str, Any]:
+        return _scene_plan(ctx)
+
+    def _scene_turn(self, ctx: dict[str, Any]) -> dict[str, Any]:
+        """一句台词。**返回值必须带 `line` 键**——`_payload_to_prose` 靠它
+        原样吐出；漏了的话台词会被 `json.dumps` 摊成一段 JSON（见该函数）。"""
+        return {"line": _scene_line(ctx)}
+
+    def _scene_revise(self, ctx: dict[str, Any]) -> dict[str, Any]:
+        return _scene_rewrite_plan(ctx)
+
 
 # ----------------------------------------------------------------------
 # 文本组装
@@ -613,6 +628,10 @@ def _payload_to_prose(payload: dict[str, Any]) -> str:
     """非 JSON 模式下把结构化结果摊平成文本（用于流式段落生成）。"""
     if "content_md" in payload:
         return str(payload["content_md"])
+    if "line" in payload:
+        # 对话工坊的一句台词：原样吐出。漏了这一支，台词会被摊成
+        # `{"line": "..."}` 一大块 JSON 字符串，前端逐字显示出来。
+        return str(payload["line"])
     if "steps" in payload:
         return "\n\n".join(
             f"{i + 1}. 现象：{s.get('phenomenon', '')}\n   机制：{s.get('mechanism', '')}\n   洞察：{s.get('insight', '')}"
@@ -912,3 +931,196 @@ def _agent_reply(
         }
 
     return _submit(messages, instruction=instruction, revising=False)
+
+
+# ----------------------------------------------------------------------
+# 对话工坊的确定性假圆桌（MockChatModel._scene_* 调用）
+#
+# 与故事 agent 同一条硬要求：**每一句都从输入派生**——处境按材料话题选，
+# 目标的措辞里带着这个人卡上「放不下的东西」，台词引用上一句里的字。
+# 演示时唯一要证明的事：这桌人**看得出在互相回应**。
+#
+# 冲突是**写进目标里的**：偶数位的人「今晚非要一个说法」，奇数位的人
+# 「绝不让它摆到台面上」，天然互相挡路——这正是这出戏的立身之本。
+# 但请记住：mock 演得再顺也证明不了真模型会冲突，它只证明链路是通的。
+# ----------------------------------------------------------------------
+
+#: 处境按材料话题出（`_TOPIC_SCENE` 的姊妹表，同一套七类键）。必须具体到
+#: 「时间、地点、在场的一件东西」——导演提示词对真模型是同一要求。
+_SCENE_PLACE: dict[str, str] = {
+    "亲子关系": "周日晚上的老屋客厅，电视开着没人看，茶几上一盘水果没动过。",
+    "职场压力": "周三晚上十一点的办公室，只剩一排灯，桌角放着凉透的盒饭。",
+    "亲密关系": "搬家前一天的出租屋，纸箱堆到窗台，地上是两个杯子的水印。",
+    "青春怀旧": "同学聚会散场后的饭店门口，路灯刚亮，谁等的车都还没来。",
+    "自我认同": "面试结束后的楼道里，声控灯灭了又亮，手里攥着没递出去的简历。",
+    "生死与失去": "清理遗物的下午，房间还保持原样，桌上那杯茶凉了很多天。",
+    "城市生活": "合租房的凌晨一点，抽油烟机还响着，锅里下着一人份的面。",
+}
+
+#: 第一句（还没有人开口）。`{t}` 是「放不下的东西」里的词（从目标里抠出）
+#: ——**不能整句念目标**：目标是对演员说的方向（"今晚非要一个说法…"），
+#: 念出来就成了小传，恰好是角色提示词第 6 条禁止的写法。
+_SCENE_OPEN_FRAMES: tuple[str, ...] = (
+    "（把椅子往前挪了挪）「{t}」这件事，今天得有个说法。",
+    "「{t}」。我今天就为这个来的。",
+    "（手停在半空）「{t}」——都别装，说开了算。",
+)
+
+#: 追问者的接话。`{a}` 是上一句里抠出的锚点——**每一帧都引用它**，
+#: 「互相回应」才有可核查的证据（测试断言 `_anchor_of(上一句)` 在本句里）。
+_SCENE_FRAMES: tuple[str, ...] = (
+    "「{a}」——好，那我也直说：这事今天就得有个结果。",
+    "你刚说「{a}」。我不跟你绕，我要的是一个准话。",
+    "（放下手里的东西）「{a}」这话你说了多少回了。",
+    "「{a}」。我听见了。可听见不等于答应。",
+)
+
+#: 回避者的接话。同样引用锚点，但话头往外推——两种帧交替出现，
+#: 桌面上的拉锯才立得住。
+_SCENE_AVOID_FRAMES: tuple[str, ...] = (
+    "「{a}」？……（没接话，起身去关了火）",
+    "你说「{a}」的时候，我一直在看窗外。",
+    "「{a}」——嗯。明天还要早起，先这样吧。",
+    "（把碗摆了摆）「{a}」。菜要凉了。",
+)
+
+#: 重写帧。`{n}` 是导演给这一回合的 note——**必须进台词**：改了稿却吐出
+#: 和原来一模一样的一句，正是缓存命中旧台词的症状，mock 里先按「一定变」
+#: 写，真模型的防线在 `scene/show.py` 的说明里。
+_SCENE_REWRITE_FRAMES: tuple[str, ...] = (
+    "（重新看了对方一眼）「{a}」——这句不算。{n}",
+    "「{a}」先放着。{n}",
+    "（改了口）「{a}」……不，{n}",
+)
+
+_SPEAKER_PREFIX_RE = re.compile(r"^[^\s：:]{1,12}[：:]\s*")
+_PAREN_RE = re.compile(r"（[^）]*）|\([^)]*\)")
+_CLAUSE_SPLIT_RE = re.compile(r"[，。！？；：、…,.!?;:]")
+_ANCHOR_DROP_RE = re.compile(r"[\s「」『』“”‘’\"'—\-－·（）()《》〈〉〔〕【】]")
+_QUOTED_RE = re.compile(r"「([^」]{1,20})」")
+
+
+def _anchor_of(line: str) -> str:
+    """从上一句里抠出锚点：去「说话人：」前缀、去括号动作，取**最后一个分句**
+    的末四字。
+
+    取末四字而不是整句：锚点要在对方嘴里被原样引用（`「…」`），长了不像
+    台词；取末分句而不是全句开头，是因为一句话的落点通常在最后那个分句里
+    ——「我一直在看窗外」比「你说」更像可以接住的话头。
+
+    测试直接 import 这个函数来核「本句引用了上一句」——**判定标准只能有一
+    份**，测试自己再写一套解析就会在标点上跟这里漂开。
+    """
+    text = _SPEAKER_PREFIX_RE.sub("", str(line or ""))
+    text = _PAREN_RE.sub("", text)
+    clauses = [c for c in _CLAUSE_SPLIT_RE.split(text) if c.strip()]
+    tail = clauses[-1] if clauses else text
+    return _ANCHOR_DROP_RE.sub("", tail)[-4:]
+
+
+def _topic_of(goal: str) -> str:
+    """从本场目标里抠出那个具体的词（目标里必然有 `「…」`，见 `_scene_plan`）。"""
+    m = _QUOTED_RE.search(goal or "")
+    if m:
+        return m.group(1)
+    return _trim(goal, 8) or "今天的事"
+
+
+def _scene_plan(ctx: dict[str, Any]) -> dict[str, Any]:
+    """导演·开场的假计划：处境按话题选，目标带着各人「放不下的东西」。"""
+    cards = [c for c in (ctx.get("characters") or []) if isinstance(c, dict)]
+    roster = [(str(c.get("name") or "").strip(), c) for c in cards]
+    roster = [(name, c) for name, c in roster if name]
+    if not roster:
+        return {"situation": "", "goals": [], "order": [], "opening": ""}
+
+    names = [name for name, _ in roster]
+    material = str(ctx.get("material_head") or "")
+    topics = _top_labels(_score(material, TOPIC_LEXICON), 1)
+    place = _SCENE_PLACE.get(topics[0] if topics else "") or _SCENE_PLACE["城市生活"]
+
+    goals: list[dict[str, str]] = []
+    for i, (name, card) in enumerate(roster):
+        obs = _trim(card.get("obsession") or "", 18) or "那件一直没说出口的事"
+        goal = (
+            f"今晚非要一个说法：「{obs}」当面说清，不许再绕。"
+            if i % 2 == 0
+            else f"绝不让「{obs}」摆到台面上——谁提就岔开谁。"
+        )
+        goals.append({"speaker": name, "goal": goal})
+
+    others = "、".join(names[1:]) or "对面"
+    return {
+        "situation": f"{place}在场的是{'、'.join(names)}。",
+        "goals": goals,
+        "order": names,
+        "opening": f"{names[0]}先开口，第一句就把话递到{others}面前，不给退路。",
+    }
+
+
+def _scene_line(ctx: dict[str, Any]) -> str:
+    """一个角色的一句台词。判定顺序：重写轮 → 第一句 → 追问/回避交替。"""
+    goal = str(ctx.get("goal") or "").strip()
+    note = str(ctx.get("note") or "").strip()
+    idx = int(ctx.get("turn_index") or 0)
+    anchor = _anchor_of(str(ctx.get("prior_line") or ""))
+
+    if note:
+        frame = _SCENE_REWRITE_FRAMES[idx % len(_SCENE_REWRITE_FRAMES)]
+        return frame.format(a=anchor or "这话", n=_trim(note, 16))
+    if not anchor:
+        frame = _SCENE_OPEN_FRAMES[idx % len(_SCENE_OPEN_FRAMES)]
+        return frame.format(t=_topic_of(goal))
+    frames = _SCENE_FRAMES if idx % 2 == 0 else _SCENE_AVOID_FRAMES
+    return frames[idx % len(frames)].format(a=anchor)
+
+
+def _scene_rewrite_plan(ctx: dict[str, Any]) -> dict[str, Any]:
+    """导演·修改的假计划：从意见里认出「开头 / 结尾 / 点了谁的名」。
+
+    定向规则（判定顺序即优先级）：说到开头动第一句，说到结尾动最后一句，
+    点了某人的名动他最后一次开口；都没说到就动最后一句。**最多两句**，
+    升序去重——与 `scene/show.py` 里 `_pick_rewrites` 的约束同源。
+    """
+    instruction = str(ctx.get("instruction") or "").strip()
+    turns = [t for t in (ctx.get("turns") or []) if isinstance(t, dict)]
+    turns = [t for t in turns if isinstance(t.get("turn_index"), int)]
+    if not turns or not instruction:
+        return {"explanation": "这条意见没有落到具体的句子上，先不动。", "rewrites": []}
+
+    picks: list[int] = []
+    if any(w in instruction for w in ("开头", "第一句", "一开始", "最初")):
+        picks.append(turns[0]["turn_index"])
+    if any(w in instruction for w in ("结尾", "最后", "收尾", "末了", "结束")):
+        picks.append(turns[-1]["turn_index"])
+    for name in dict.fromkeys(str(t.get("speaker") or "") for t in turns):
+        if name and name in instruction:
+            picks.append(max(t["turn_index"] for t in turns if t.get("speaker") == name))
+    if not picks:
+        picks.append(turns[-1]["turn_index"])
+
+    uniq = sorted(set(picks))
+    chosen = uniq if len(uniq) <= 2 else [uniq[0], uniq[-1]]
+
+    last_idx = turns[-1]["turn_index"]
+    rewrites: list[dict[str, Any]] = []
+    for tid in chosen:
+        row = next(t for t in turns if t["turn_index"] == tid)
+        where = (
+            "开头这句" if tid == turns[0]["turn_index"] else
+            "收尾这句" if tid == last_idx else
+            f"第 {tid} 句"
+        )
+        rewrites.append(
+            {
+                "turn_index": tid,
+                "speaker": str(row.get("speaker") or ""),
+                "note": f"{where}按「{_trim(instruction, 20)}」重说：不解释、不铺台阶，话更短更硬。",
+            }
+        )
+
+    moved = "、".join(f"第 {t['turn_index']} 句" for t in rewrites)
+    return {
+        "explanation": f"这条意见动到 {moved}：{_trim(instruction, 40)}。改完这几句，其余台词一字不动。",
+        "rewrites": rewrites,
+    }

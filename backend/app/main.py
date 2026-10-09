@@ -80,6 +80,16 @@ async def lifespan(app: FastAPI):
     except Exception:
         log.warning("agent_reap_skipped", hint="数据库不可达，未清理上次残留的故事工坊会话")
 
+    # 对话工坊同理。它的「正在演」尤其能藏：一场 3 人 × 3 轮的戏要跑好几分钟，
+    # 进程被杀时后台任务一起没了，而那一行会停在 running；下次打开面板看到的
+    # 是「正在演…」，其实台上一个演员都没有。
+    from app.services.scene_service import reap_stale_scene_sessions
+
+    try:
+        await reap_stale_scene_sessions()
+    except Exception:
+        log.warning("scene_reap_skipped", hint="数据库不可达，未清理上次残留的对话工坊会话")
+
     yield
 
     # 先收敛在跑的后台任务再拆连接池——顺序反了的话，正在提交产物的任务
@@ -97,6 +107,12 @@ async def lifespan(app: FastAPI):
     from app.services.agent_service import shutdown_agent_tasks
 
     await shutdown_agent_tasks()
+    # 对话工坊的一场戏最长能跑 600 秒（SHOW_TIMEOUT），中途一直在落库、发事件。
+    # 同一条理由：必须在拆连接池**之前**收，否则收尾那一条 UPDATE 正好撞上
+    # 已经关掉的引擎。
+    from app.services.scene_service import shutdown_scene_tasks
+
+    await shutdown_scene_tasks()
 
     await close_neo4j()
     await close_qdrant()

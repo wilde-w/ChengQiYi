@@ -59,6 +59,17 @@ export type EventType =
   | 'agent_tool_result'
   | 'agent_completed'
   | 'agent_cancelled'
+  /* 对话工坊。第三条链路（命名空间 `scene`、第三张事件表），seq 同样自成
+     一条。注意 `delta` 与流水线**共用**同一个类型名——落点靠 data 里的
+     `field="line"` 与 `speaker`/`turn_index` 区分，见 store/applySceneEvent。 */
+  | 'scene_started'
+  | 'scene_setup'
+  | 'scene_thinking'
+  | 'scene_turn'
+  | 'scene_note'
+  | 'scene_rewrites'
+  | 'scene_completed'
+  | 'scene_cancelled'
 
 /** `partial` 事件的 data.kind——指明这次增量是哪种产物。 */
 export type PartialKind =
@@ -472,4 +483,104 @@ export interface AgentCapabilities {
 export interface AgentOptions {
   allow_novel?: boolean
   target_chars?: number
+}
+
+/* ----------------------------------------------------------------------
+ * 对话工坊（`/scene/*`）
+ *
+ * 与后端 `app/schemas/scene.py` 一一对应，字段名照抄。会话状态复用
+ * `AgentStatus`——两边的语义一模一样（idle/running/failed/cancelled），
+ * 再造一个同形的枚举只会让「加状态」变成改两处。
+ *
+ * 与故事链路最大的一处结构差异：**这里同时有「一句」和「一场」两个粒度**。
+ * `SceneTurn` 是剧本的一行，`SceneSetup` 是导演的安排，二者都随快照下发
+ * （它们是作品）；而创作记录（意见、修改安排）只在事件里（那是过程）。
+ * -------------------------------------------------------------------- */
+
+/** 一张人物卡。五个字段的分工见后端 `SceneCharacter` 的文档串。 */
+export interface SceneCharacter {
+  name: string
+  identity: string
+  /** 性格与经历——**戏从这里长出来**。 */
+  persona: string
+  /** 说话的腔调。可以空着，让 persona 自己带出来。 */
+  voice: string
+  /** 放不下的那件事。必填：没有执念的人在台上只是背景板。 */
+  obsession: string
+}
+
+/** 一个人的本场目标。`speaker` 与人物卡的 `name` 逐字相同。 */
+export interface SceneGoal {
+  speaker: string
+  goal: string
+}
+
+/** 导演的安排。开演那一下发一次，面板顶部摊开给创作者看。 */
+export interface SceneSetup {
+  situation: string
+  /** **两个目标是不是顶着的，是这出戏成不成立的唯一判据。** */
+  goals: SceneGoal[]
+  order: string[]
+  opening: string
+}
+
+/** 剧本的一行。 */
+export interface SceneTurn {
+  turn_index: number
+  round_no: number
+  speaker: string
+  text: string
+  /** 这一句是被改稿重写过的（面板上留个记号）。 */
+  revised: boolean
+  /** 导演为什么这么改。只有 `revised` 的有。 */
+  note: string
+}
+
+export interface SceneSession {
+  id: string
+  title: string
+  input_chars: number
+  status: AgentStatus
+  /** 中文阶段名（「导演正在排戏…」），**前端不维护映射表**。 */
+  stage?: string | null
+  characters: SceneCharacter[]
+  setup?: SceneSetup | null
+  /** 剧本体全文，由后端按回合拼好（`母亲：…\n我：…`）。 */
+  script: string
+  rounds: number
+  /** 已定稿的句数。改稿**不**让它变多。 */
+  turn_index: number
+  total_turns: number
+  model?: string | null
+  providers: Record<string, unknown>
+  error?: string | null
+  is_running: boolean
+  is_terminal: boolean
+  /** 现在能不能提意见（idle 且演过内容）。**由后端算**——见 schemas 的说明。 */
+  can_revise: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface SceneSessionDetail extends SceneSession {
+  input_text: string
+  turns: SceneTurn[]
+  demo: boolean
+}
+
+export interface SceneCapabilities {
+  input_max: number
+  instruction_max: number
+  characters_min: number
+  characters_max: number
+  /** 五个字段的上限：前端的 maxlength 与字数计数直接用，**不抄一遍**。 */
+  name_max: number
+  identity_max: number
+  persona_max: number
+  voice_max: number
+  obsession_max: number
+  rounds: number
+  rounds_choices: number[]
+  model: string
+  demo: boolean
 }
