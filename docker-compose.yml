@@ -1,0 +1,154 @@
+# 观心 — 基础设施
+#
+# 开发默认：只起这 4 个基础服务，前后端跑在宿主机（热重载更快）。
+#   docker compose up -d
+# 自包含演示（前后端也进容器）：
+#   docker compose --profile full up -d
+#
+# 注意：宿主端口刻意不用默认值（5432/6379/7474 常被 Windows 上的本地安装占用）。
+# 注意：数据一律用命名卷，绝不把 Windows 路径 bind-mount 进 pg_data / neo4j_data
+#      —— NTFS 挂载的文件语义与权限问题是最常见的故障源。
+
+name: guanxin
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: guanxin
+      POSTGRES_PASSWORD: guanxin
+      POSTGRES_DB: guanxin
+      # 中文语料需要正确的排序与编码
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    ports:
+      - "55432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U guanxin -d guanxin"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  qdrant:
+    # 版本必须与 requirements.txt 里的 qdrant-client 主次版本对齐。
+    # 客户端会在启动时做兼容性检查，差得太多会直接告警
+    # （v1.12.4 的服务端配 v1.19.1 的客户端 = 相差 7 个小版本）。
+    image: qdrant/qdrant:v1.19.1
+    restart: unless-stopped
+    ports:
+      # 宿主端口刻意非默认：6333/6334 在本机已被其他项目占用，
+      # 与 postgres(55432)/redis(56379) 保持同一套 5xxxx 约定。
+      # 容器内仍是 6333——只有宿主的后端进程需要改 QDRANT_URL。
+      - "56333:6333"   # HTTP / dashboard
+      - "56334:6334"   # gRPC
+    volumes:
+      - qdrant_data:/qdrant/storage
+    healthcheck:
+      # 该镜像不含 curl/wget，只能用 bash 的 /dev/tcp 探测（容器内的 6333）
+      test: ["CMD-SHELL", "bash -c ':> /dev/tcp/127.0.0.1/6333' || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: >
+      redis-server
+      --appendonly yes
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+    ports:
+      - "56379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  neo4j:
+    image: neo4j:5-community
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: neo4j/guanxin12345
+      # 不显式限制的话，默认堆计算会吃掉 Docker Desktop 的大部分内存配额
+      NEO4J_server_memory_heap_initial__size: 256M
+      NEO4J_server_memory_heap_max__size: 512M
+      NEO4J_server_memory_pagecache_size: 256M
+    ports:
+      - "7474:7474"   # HTTP / browser
+      - "7687:7687"   # Bolt
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:7474/ >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      # Neo4j 首次启动要约 15s 才开放 Bolt，没有 start_period 会被判定不健康并拖死依赖它的服务
+      start_period: 30s
+
+  backend:
+    profiles: ["full"]
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --workers 1
+    environment:
+      POSTGRES_DSN: postgresql+asyncpg://guanxin:guanxin@postgres:5432/guanxin
+      REDIS_URL: redis://redis:6379/0
+      QDRANT_URL: http://qdrant:6333
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USER: neo4j
+      NEO4J_PASSWORD: guanxin12345
+      CORS_ORIGINS: http://localhost:5173
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      neo4j:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/api/v1/health', timeout=3).status==200 else 1)\""]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
+
+  frontend:
+    profiles: ["full"]
+    image: node:24-alpine
+    working_dir: /app
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    environment:
+      VITE_API_BASE: http://localhost:8000
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - fe_node_modules:/app/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  pg_data:
+  qdrant_data:
+  redis_data:
+  neo4j_data:
+  neo4j_logs:
+  fe_node_modules:

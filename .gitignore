@@ -1,0 +1,37 @@
+# secrets
+.env
+.env.local
+.env.*.local
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+
+# node
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+
+# infra data (named volumes live in Docker, these guard against accidental local dumps)
+data/
+*.log
+
+# 用户从 UI 导入的书籍原文件。**这是用户数据，不是仓库内容**——
+# 它们没有版本控制价值，而且可能很大。正文落库后存在 Qdrant payload 里，
+# 这里的副本只在「ingest-kb --reset 之后重新导入」时用得上。
+backend/app/kb/imports/
+
+# ide
+.idea/
+.vscode/
+*.swp
+.DS_Store

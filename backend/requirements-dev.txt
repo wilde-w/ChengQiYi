@@ -1,0 +1,10 @@
+-r requirements.txt
+
+pytest>=8.3.0
+pytest-asyncio>=0.24.0
+ruff>=0.8.0
+
+# scripts/ 下的浏览器验收要它。装完还要下载一次浏览器：
+#   python -m playwright install msedge
+# （脚本用的是系统自带的 Edge，`channel="msedge"`，通常不用再下载。）
+playwright>=1.49.0

@@ -1,0 +1,388 @@
+{
+  "aweme_id": "7318456120398745621",
+  "video": {
+    "aweme_id": "7318456120398745621",
+    "title": "凌晨一点，我在改第七版方案",
+    "caption": "连续三个月没休过周末了。今天领导说这版再不行就换人，我居然有点想笑。",
+    "author_name": "凌晨一点的写字楼",
+    "author_id": "MS4wLjABAAAA3Fq8Lm2Xz9Vd5Rt7Yw1Bn4Kc6Pg8Jh0Sd3Ef5Ab7",
+    "author_avatar": "local://demo/avatar_burnout.jpg",
+    "publish_time": "2026-07-22T01:07:00+08:00",
+    "duration_ms": 54000,
+    "cover_url": "local://demo/office_night.jpg",
+    "share_url": "https://www.douyin.com/video/7318456120398745621",
+    "stats": {
+      "digg_count": 376000,
+      "comment_count": 8600,
+      "share_count": 12400,
+      "collect_count": 51000
+    }
+  },
+  "transcript": {
+    "text": "现在是凌晨一点十三分，我还在公司。第七版方案，甲方说还是第一版好。这个月我休了零天，上个月也是零天。我今年二十九，体检报告上多了三个箭头，医生说要复查，我一直没去，因为去复查要请假。刚刚楼下便利店的店员跟我说，你最近来得有点勤啊。我笑了笑没说话。我爸妈以为我在大城市过得很好，我每次跟他们视频都把工位背景挡住。有时候我也想，我到底是在生活，还是在完成一份很长很长的班表。今天就说到这吧，我得把第八版改出来了。",
+    "source": "mock_asr",
+    "segments": []
+  },
+  "comments": [
+    {
+      "comment_id": "c001",
+      "text": "三个月零休假，我上个月也是。我妈问我周末干嘛，我说加班，她沉默了三秒钟，说那你要吃好点",
+      "author_name": "熬夜冠军选手",
+      "author_id": "MS4wLjABAAAA_b001",
+      "like_count": 41200,
+      "reply_count": 318,
+      "publish_time": "2026-07-22T02:14:00+08:00"
+    },
+    {
+      "comment_id": "c002",
+      "text": "凌晨一点的写字楼，一半的灯还亮着。我们都以为自己在往上走，其实只是在原地转圈",
+      "author_name": "咖啡续命中",
+      "author_id": "MS4wLjABAAAA_b002",
+      "like_count": 33600,
+      "reply_count": 126,
+      "publish_time": "2026-07-22T03:02:00+08:00"
+    },
+    {
+      "comment_id": "c003",
+      "text": "第七版改回了第一版，这句我能笑一辈子，笑着笑着就笑不出来了",
+      "author_name": "周报写不完",
+      "author_id": "MS4wLjABAAAA_b003",
+      "like_count": 29800,
+      "reply_count": 241,
+      "publish_time": "2026-07-22T06:48:00+08:00"
+    },
+    {
+      "comment_id": "c004",
+      "text": "上个月我发烧38度7，早上请了半天假，中午领导在群里@我问方案呢。我说我在医院，他说那你打完针下午能不能来一趟。我打完针真的去了，坐在工位上脑子嗡嗡的，把第七版改出来发给他。他回了一个“收到”，两个字。那天晚上我十一点打车回家，在车上想，我今天到底是在证明什么。后来我想明白了，我什么都没证明，我只是不敢说不。",
+      "author_name": "三十岁还在挤地铁",
+      "author_id": "MS4wLjABAAAA_b004",
+      "like_count": 1900,
+      "reply_count": 73,
+      "publish_time": "2026-07-22T08:31:00+08:00"
+    },
+    {
+      "comment_id": "c005",
+      "text": "凭什么把命卖给公司？工资买的是我八个小时，不是我的一整个人生。可这话我只敢在这儿说",
+      "author_name": "工位上的绿萝",
+      "author_id": "MS4wLjABAAAA_b005",
+      "like_count": 14800,
+      "reply_count": 96,
+      "publish_time": "2026-07-22T09:12:00+08:00"
+    },
+    {
+      "comment_id": "c006",
+      "text": "体检报告上的箭头我也有，医生说三个月后复查，我到现在都没去。因为复查要请假，请假要扣钱",
+      "author_name": "甲方说的都对",
+      "author_id": "MS4wLjABAAAA_b006",
+      "like_count": 26400,
+      "reply_count": 87,
+      "publish_time": "2026-07-22T10:05:00+08:00"
+    },
+    {
+      "comment_id": "c007",
+      "text": "最怕的不是加班，是加完班发现这活儿明天还得重做，等于今天白熬了",
+      "author_name": "又要改第七版",
+      "author_id": "MS4wLjABAAAA_b007",
+      "like_count": 18700,
+      "reply_count": 52,
+      "publish_time": "2026-07-22T11:22:00+08:00"
+    },
+    {
+      "comment_id": "c008",
+      "text": "我已经递了离职，下个月去云南待一个月。钱可以再赚，人只有一个，这话以前我不信，现在信了",
+      "author_name": "摸鱼小能手",
+      "author_id": "MS4wLjABAAAA_b008",
+      "like_count": 2800,
+      "reply_count": 114,
+      "publish_time": "2026-07-22T12:40:00+08:00"
+    },
+    {
+      "comment_id": "c009",
+      "text": "便利店店员那句“你最近来得有点勤啊”真的破防了，最关心我作息的居然是个陌生人",
+      "author_name": "深圳打工人_L",
+      "author_id": "MS4wLjABAAAA_b009",
+      "like_count": 15300,
+      "reply_count": 38,
+      "publish_time": "2026-07-22T13:56:00+08:00"
+    },
+    {
+      "comment_id": "c010",
+      "text": "上周我连续四天没回家，睡在公司沙发上。第五天早上我去洗手间洗脸，抬头看见镜子里的自己，眼窝是黑的，胡子拉碴，我盯着看了一会儿，居然有点认不出来。我给老婆发消息说今天早点回，她说你上周也这么说。我下班的时候九点半，到家十一点，孩子已经睡了。我在他床边坐了十分钟，看他呼吸，然后去洗澡，第二天照常上班。",
+      "author_name": "凌晨四点的CBD",
+      "author_id": "MS4wLjABAAAA_b010",
+      "like_count": 1600,
+      "reply_count": 61,
+      "publish_time": "2026-07-22T15:20:00+08:00"
+    },
+    {
+      "comment_id": "c011",
+      "text": "我爸妈也以为我在这边过得很好。我每次视频都把工位背景挡住，还要装作刚下班很轻松的样子",
+      "author_name": "头发比人先走",
+      "author_id": "MS4wLjABAAAA_b011",
+      "like_count": 19600,
+      "reply_count": 142,
+      "publish_time": "2026-07-22T16:44:00+08:00"
+    },
+    {
+      "comment_id": "c012",
+      "text": "加V：xlyy_2026 职场焦虑/失眠/内耗 一对一疏导，包好，无效退款，主页自取",
+      "author_name": "键盘敲到手抽筋",
+      "author_id": "MS4wLjABAAAA_b012",
+      "like_count": 15,
+      "reply_count": 4,
+      "publish_time": "2026-07-22T17:33:00+08:00"
+    },
+    {
+      "comment_id": "c013",
+      "text": "最恶心的就是那句“年轻人就该多吃点苦”。吃苦和被消耗是两回事，别混为一谈",
+      "author_name": "会开会的鹦鹉",
+      "author_id": "MS4wLjABAAAA_b013",
+      "like_count": 12300,
+      "reply_count": 88,
+      "publish_time": "2026-07-22T18:50:00+08:00"
+    },
+    {
+      "comment_id": "c014",
+      "text": "我今年也是二十九，感觉人生被切成了一段一段的deadline，中间没有缝",
+      "author_name": "打卡机器",
+      "author_id": "MS4wLjABAAAA_b014",
+      "like_count": 12400,
+      "reply_count": 29,
+      "publish_time": "2026-07-22T19:58:00+08:00"
+    },
+    {
+      "comment_id": "c015",
+      "text": "连轴转三个月，我已经忘了不加班的周末是什么感觉了。好像上一个周末还是去年的事",
+      "author_name": "月亮不睡我不睡",
+      "author_id": "MS4wLjABAAAA_b015",
+      "like_count": 10800,
+      "reply_count": 33,
+      "publish_time": "2026-07-22T21:26:00+08:00"
+    },
+    {
+      "comment_id": "c016",
+      "text": "去年我为了一个项目连着加班两个多月，最晚一次到凌晨四点。项目上线那天庆功宴上，领导敬我酒说辛苦了，就这三个字。结果第二个月公司调整，我在优化名单里。HR跟我说这是公司的决定，跟个人表现无关。我拿着N+1走出办公楼的时候是下午三点，太阳特别好，我在楼下站了一会儿，觉得这两年像一场很长的梦。现在我在新公司，还是加班，但我学会了到点就走。",
+      "author_name": "内耗十级选手",
+      "author_id": "MS4wLjABAAAA_b016",
+      "like_count": 1400,
+      "reply_count": 57,
+      "publish_time": "2026-07-22T23:09:00+08:00"
+    },
+    {
+      "comment_id": "c017",
+      "text": "改七版方案不是敬业，是没人敢跟甲方说一句“这样不行”。最后累死的是干活的",
+      "author_name": "工牌挂脖三年",
+      "author_id": "MS4wLjABAAAA_b017",
+      "like_count": 9600,
+      "reply_count": 64,
+      "publish_time": "2026-07-23T00:41:00+08:00"
+    },
+    {
+      "comment_id": "c018",
+      "text": "每天下班回家就瘫在床上刷手机，不是不想睡，是舍不得睡。只有这几个小时是我自己的",
+      "author_name": "项目deadline战神",
+      "author_id": "MS4wLjABAAAA_b018",
+      "like_count": 8600,
+      "reply_count": 72,
+      "publish_time": "2026-07-23T07:26:00+08:00"
+    },
+    {
+      "comment_id": "c019",
+      "text": "我最近开始逼自己十一点关电脑，天塌不下来，真的。方案第二天改也不会死人",
+      "author_name": "保温杯里泡枸杞",
+      "author_id": "MS4wLjABAAAA_b019",
+      "like_count": 1900,
+      "reply_count": 48,
+      "publish_time": "2026-07-23T09:03:00+08:00"
+    },
+    {
+      "comment_id": "c020",
+      "text": "我女儿三岁，有天晚上我十一点回家，她已经睡了。枕头边放着一张她画的画，画上有三个人，中间那个小小的，旁边两个大的，还有一排我看不懂的字。我老婆说那是她画的我们一家。我拿着那张画在客厅坐了很久，突然觉得我好像很久没有好好看过她。第二天我跟领导请了一天假，带她去了动物园。她一直拉着我的手，说爸爸你看这个，爸爸你看那个。那天我走了两万步，一点都不觉得累。",
+      "author_name": "通勤两小时",
+      "author_id": "MS4wLjABAAAA_b020",
+      "like_count": 1200,
+      "reply_count": 95,
+      "publish_time": "2026-07-23T11:38:00+08:00"
+    },
+    {
+      "comment_id": "c021",
+      "text": "领导说再不行就换人，我居然有点期待。换了正好，我真的想休息了",
+      "author_name": "PPT纺织女工",
+      "author_id": "MS4wLjABAAAA_b021",
+      "like_count": 6100,
+      "reply_count": 27,
+      "publish_time": "2026-07-23T14:12:00+08:00"
+    },
+    {
+      "comment_id": "c022",
+      "text": "我们不是不想努力，是努力了也没用。升职轮不到你，加薪没你的份，锅全是你的",
+      "author_name": "周五的快乐",
+      "author_id": "MS4wLjABAAAA_b022",
+      "like_count": 7200,
+      "reply_count": 81,
+      "publish_time": "2026-07-23T16:27:00+08:00"
+    },
+    {
+      "comment_id": "c023",
+      "text": "不是身体累，是心里空。做什么都提不起劲，晚上又睡不着，这大概就是内耗吧",
+      "author_name": "老板画的饼真大",
+      "author_id": "MS4wLjABAAAA_b023",
+      "like_count": 4700,
+      "reply_count": 56,
+      "publish_time": "2026-07-23T18:45:00+08:00"
+    },
+    {
+      "comment_id": "c024",
+      "text": "。。。。。😅😅😅😅😅😅",
+      "author_name": "加班到头秃",
+      "author_id": "MS4wLjABAAAA_b024",
+      "like_count": 6,
+      "reply_count": 0,
+      "publish_time": "2026-07-23T19:52:00+08:00"
+    },
+    {
+      "comment_id": "c025",
+      "text": "三个月没休息，我现在一看到工作群弹出消息就心慌，手心出汗，这是不是已经病了",
+      "author_name": "深夜食堂的常客",
+      "author_id": "MS4wLjABAAAA_b025",
+      "like_count": 3900,
+      "reply_count": 44,
+      "publish_time": "2026-07-23T21:15:00+08:00"
+    },
+    {
+      "comment_id": "c026",
+      "text": "我在这家公司五年，从二十六岁到三十一岁。最忙的那一年我一个月瘦了八斤，同事说我看起来特别憔悴。我那时候觉得熬过去就好了，升职加薪都会来。结果五年过去，职级升了一级，工资涨了两千，体检报告上的箭头从零变成五个。上个月我照镜子，发现头顶有一块已经能看到头皮了。我今年三十一。我有时候会想，如果五年前的我看到现在的我，他大概什么都不会说。",
+      "author_name": "洗衣机在响",
+      "author_id": "MS4wLjABAAAA_b026",
+      "like_count": 980,
+      "reply_count": 63,
+      "publish_time": "2026-07-23T23:31:00+08:00"
+    },
+    {
+      "comment_id": "c027",
+      "text": "说好的双休呢，说好的调休呢，全被一句“项目紧急”给抹了。我们的时间就不是时间？",
+      "author_name": "只想躺平",
+      "author_id": "MS4wLjABAAAA_b027",
+      "like_count": 5400,
+      "reply_count": 37,
+      "publish_time": "2026-07-24T08:19:00+08:00"
+    },
+    {
+      "comment_id": "c028",
+      "text": "撑不住的时候连哭都哭不出来，只想一个人待着，谁也别跟我说话",
+      "author_name": "效率工具收藏家",
+      "author_id": "MS4wLjABAAAA_b028",
+      "like_count": 3200,
+      "reply_count": 19,
+      "publish_time": "2026-07-24T10:44:00+08:00"
+    },
+    {
+      "comment_id": "c029",
+      "text": "朋友们，去睡吧。方案明天再改，地球照样转，你的身体比方案重要一万倍",
+      "author_name": "沉默的加班狗",
+      "author_id": "MS4wLjABAAAA_b029",
+      "like_count": 1300,
+      "reply_count": 35,
+      "publish_time": "2026-07-24T13:07:00+08:00"
+    },
+    {
+      "comment_id": "c030",
+      "text": "上个月我爸住院，我在外地出差，没能回去。视频里他说没事没事，小毛病，输两天液就出院。我妈在旁边没说话，后来我妹告诉我，我爸那两天晚上疼得睡不着，一直翻身。我挂了视频坐在酒店床边，第一次认真地想，我这几年到底在忙什么。第二天我把出差的活交接出去，买了最早的一班机票回去。在病房门口我妈看到我就哭了，我什么都没敢说。",
+      "author_name": "我的椅子会转",
+      "author_id": "MS4wLjABAAAA_b030",
+      "like_count": 760,
+      "reply_count": 58,
+      "publish_time": "2026-07-24T15:36:00+08:00"
+    },
+    {
+      "comment_id": "c031",
+      "text": "我今年提了三次离职，每次都被“再坚持一下”“这个项目完了就好了”劝回来。然后就没完没了",
+      "author_name": "假装很忙",
+      "author_id": "MS4wLjABAAAA_b031",
+      "like_count": 3800,
+      "reply_count": 49,
+      "publish_time": "2026-07-24T17:52:00+08:00"
+    },
+    {
+      "comment_id": "c032",
+      "text": "说句实在话，工作只是生活的一部分，别把它当成全部。我以前不懂，今年才开始懂",
+      "author_name": "社畜本体",
+      "author_id": "MS4wLjABAAAA_b032",
+      "like_count": 900,
+      "reply_count": 22,
+      "publish_time": "2026-07-24T19:24:00+08:00"
+    },
+    {
+      "comment_id": "c033",
+      "text": "0基础转行AI训练师，月入3w，主页简介自取，名额只剩3个，先到先得",
+      "author_name": "年底冲业绩",
+      "author_id": "MS4wLjABAAAA_b033",
+      "like_count": 9,
+      "reply_count": 2,
+      "publish_time": "2026-07-24T20:47:00+08:00"
+    },
+    {
+      "comment_id": "c034",
+      "text": "我朋友跟我一个行业，去年体检查出甲状腺结节，医生说要做手术。她做手术那天我陪她在医院，她进手术室之前还在回工作消息。出来以后她跟我说，躺在里面的时候她想的全是如果下不来台，她那些项目谁做。她休了一个月，回来后整个人变了，到点就走，周末消息不回。我问她不怕被优化吗，她说怕，但更怕死。",
+      "author_name": "提离职第99天",
+      "author_id": "MS4wLjABAAAA_b034",
+      "like_count": 620,
+      "reply_count": 41,
+      "publish_time": "2026-07-24T22:13:00+08:00"
+    },
+    {
+      "comment_id": "c035",
+      "text": "凭什么身体坏了是我自己的事，业绩好了就成了团队的功劳？这笔账谁给我算算",
+      "author_name": "外卖备注不要香菜",
+      "author_id": "MS4wLjABAAAA_b035",
+      "like_count": 2100,
+      "reply_count": 30,
+      "publish_time": "2026-07-25T07:38:00+08:00"
+    },
+    {
+      "comment_id": "c036",
+      "text": "有一次我加班到凌晨三点，打车回家。司机问我说，姑娘这么晚才下班啊。我说嗯。他说你们做互联网的吧，我拉过好几个，都是这个点。他说你们这行真不容易，钱是赚得多，但命是自己的。我说师傅你别说了，再说我要哭了。他没再说话，把电台声音调小了一点。到家的时候他少收了我五块钱，说留着明天买早饭。",
+      "author_name": "工位是我家",
+      "author_id": "MS4wLjABAAAA_b036",
+      "like_count": 430,
+      "reply_count": 36,
+      "publish_time": "2026-07-25T10:26:00+08:00"
+    },
+    {
+      "comment_id": "c037",
+      "text": "我从上个月开始，每周日坚决不回工作消息。到现在为止，居然真的没有人开除我",
+      "author_name": "熊猫眼女士",
+      "author_id": "MS4wLjABAAAA_b037",
+      "like_count": 640,
+      "reply_count": 17,
+      "publish_time": "2026-07-25T13:54:00+08:00"
+    },
+    {
+      "comment_id": "c038",
+      "text": "我租的房子离公司走路十分钟，就为了能多睡二十分钟。结果是，我每天还是十一点才回家，路是省了，觉没多睡。有一次我终于九点下班，走回去的路上看见楼下快餐店老板在收摊，他跟我打招呼，说今天挺早啊。我愣了一下，突然特别想哭。我搬来两年，这是第一次在这个点回家。",
+      "author_name": "关掉电脑就跑",
+      "author_id": "MS4wLjABAAAA_b038",
+      "like_count": 180,
+      "reply_count": 11,
+      "publish_time": "2026-07-25T16:35:00+08:00"
+    },
+    {
+      "comment_id": "c039",
+      "text": "撑不住就休息，这不是矫情，是我今年学会的第一件事。共勉",
+      "author_name": "想去看海",
+      "author_id": "MS4wLjABAAAA_b039",
+      "like_count": 210,
+      "reply_count": 14,
+      "publish_time": "2026-07-25T19:48:00+08:00"
+    },
+    {
+      "comment_id": "c040",
+      "text": "凌晨一点还在改方案？那是你效率低吧。别拿出来卖惨博同情了，谁不加班啊",
+      "author_name": "明天也要加油鸭",
+      "author_id": "MS4wLjABAAAA_b040",
+      "like_count": 187,
+      "reply_count": 56,
+      "publish_time": "2026-07-25T22:41:00+08:00"
+    }
+  ]
+}

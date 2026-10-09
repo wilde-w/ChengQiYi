@@ -1,0 +1,39 @@
+[project]
+name = "guanxin-backend"
+version = "1.0.0"
+description = "观心 · 抖音内容心理洞察工作台 — 后端"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"
+# **整个会话共用一个事件循环**，而不是默认的「每个用例一个新循环」。
+# 应用侧是进程级单例（SQLAlchemy 引擎、Qdrant/Neo4j 驱动），它们的连接
+# 绑定在**创建它的那个循环**上；每个用例换一个循环的话，第二个用例就会
+# 拿到属于已关闭循环的连接，报出一个与测试内容毫无关系的 socket 错误。
+# fixture 与 test 必须同为 session，否则 fixture 里建的连接在测试里用不了。
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"
+addopts = "-q --strict-markers"
+filterwarnings = [
+    "ignore::DeprecationWarning:websockets.*",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+exclude = ["migrations", ".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM", "RUF"]
+ignore = [
+    "E501",    # line-length 由 formatter 处理
+    "B008",    # FastAPI 的 Depends() 就是要在默认值里调用
+    "RUF001",  # 中文全角标点在字符串里是刻意的
+    "RUF002",
+    "RUF003",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]

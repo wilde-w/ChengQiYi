@@ -1,0 +1,121 @@
+@import 'tailwindcss';
+
+/* 观心 — 视觉基调
+ *
+ * 取「纸与墨」而非科技感的深色仪表盘：这个产品的读者是研究者、创作者、
+ * 心理咨询师，输出物是文学化的分析文字。暖白纸面上配墨色文字，
+ * 让长文的可读性优先于视觉冲击。
+ * 文学引用段落另用衬线字体，与正文的无衬线形成「引文 vs 论述」的区分。
+ */
+@theme {
+  --color-paper: #faf8f4;
+  --color-paper-sunk: #f3f0ea;
+  --color-surface: #ffffff;
+
+  --color-ink: #1f1d1a;
+  --color-ink-soft: #57534e;
+  --color-ink-faint: #8a8580;
+  --color-ink-ghost: #b5b0a8;
+
+  --color-line: #e7e3dc;
+  --color-line-strong: #d5cfc5;
+
+  --color-accent: #4338ca;
+  --color-accent-soft: #eef0ff;
+  --color-accent-line: #c7cbf5;
+
+  --color-warn: #b45309;
+  --color-warn-soft: #fef6e7;
+  --color-danger: #b91c1c;
+  --color-danger-soft: #fef2f2;
+  --color-ok: #15803d;
+
+  --font-sans:
+    'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', 'Source Han Sans SC',
+    system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif:
+    'Songti SC', 'STSong', 'SimSun', 'Noto Serif SC', 'Source Han Serif SC',
+    Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', ui-monospace, Consolas, monospace;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* 细滚动条——三栏工作台里默认滚动条太抢眼 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-strong) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-line-strong);
+  border-radius: 4px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-ghost);
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@utility font-literary {
+  font-family: var(--font-serif);
+  line-height: 1.9;
+  letter-spacing: 0.01em;
+}
+
+/* 面板入场：证据卡、簇、推理节点逐条浮现时用 */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@utility animate-rise {
+  animation: rise 0.28s cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+@utility animate-pulse-soft {
+  animation: pulse-soft 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
